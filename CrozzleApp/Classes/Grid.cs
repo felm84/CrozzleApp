@@ -17,7 +17,7 @@ namespace CrozzleApp.Classes
             this.columns = columns;
         }
 
-        public int Rows { get => rows; set => rows = value; }
-        public int Columns { get => columns; set => columns = value; }
+        public int Rows { get => rows; private set => rows = value; }
+        public int Columns { get => columns; private set => columns = value; }
     }
 }

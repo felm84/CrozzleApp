@@ -84,13 +84,13 @@ namespace CrozzleApp.Classes
         public int MinNumberUniqWords
         {
             get => minNumberUniqWords;
-            set => CheckMinNumber(value);
+            private set => CheckMinNumber(value);
         }
 
         public int MaxNumberUniqWords
         {
             get => maxNumberUniqWords;
-            set => CheckMaxNumber(value, minNumberUniqWords);
+            private set => CheckMaxNumber(value, minNumberUniqWords);
         }
 
         public string InvalidCrozzleScore
@@ -129,129 +129,129 @@ namespace CrozzleApp.Classes
         public string BgColorEmpty
         {
             get => bgColorEmpty;
-            set => CheckColorData(value);
+            private set => CheckColorData(value);
         }
 
         public string BgColorNonEmpty
         {
             get => bgColorNonEmpty;
-            set => CheckColorData(value);
+            private set => CheckColorData(value);
         }
 
         public int MinNumberRows
         {
             get => minNumberRows;
-            set => CheckMinNumber(value);
+            private set => CheckMinNumber(value);
         }
 
         public int MaxNumberRows
         {
             get => maxNumberRows;
-            set => CheckMaxNumber(value, minNumberRows);
+            private set => CheckMaxNumber(value, minNumberRows);
         }
 
         public int MinNumberCol
         {
             get => minNumberCol;
-            set => CheckMinNumber(value);
+            private set => CheckMinNumber(value);
         }
 
         public int MaxNumberCol
         {
             get => maxNumberCol;
-            set => CheckMaxNumber(value, minNumberCol);
+            private set => CheckMaxNumber(value, minNumberCol);
         }
 
         public int MinHorzWords
         {
             get => minHorzWords;
-            set => CheckMinNumber(value);
+            private set => CheckMinNumber(value);
         }
 
         public int MaxHorzWords
         {
             get => maxHorzWords;
-            set => CheckMaxNumber(value, minHorzWords);
+            private set => CheckMaxNumber(value, minHorzWords);
         }
 
         public int MinVertWords
         {
             get => minVertWords;
-            set => CheckMinNumber(value);
+            private set => CheckMinNumber(value);
         }
 
         public int MaxVertWords
         {
             get => maxVertWords;
-            set => CheckMaxNumber(value, minVertWords);
+            private set => CheckMaxNumber(value, minVertWords);
         }
 
         public int MinInterHorzWords
         {
             get => minInterHorzWords;
-            set => CheckMinNumber(value);
+            private set => CheckMinNumber(value);
         }
 
         public int MaxInterHorzWords
         {
             get => maxInterHorzWords;
-            set => CheckMaxNumber(value, minInterHorzWords);
+            private set => CheckMaxNumber(value, minInterHorzWords);
         }
 
         public int MinInterVertWords
         {
             get => minInterVertWords;
-            set => CheckMinNumber(value);
+            private set => CheckMinNumber(value);
         }
 
         public int MaxInterVertWords
         {
             get => maxInterVertWords;
-            set => CheckMaxNumber(value, minInterVertWords);
+            private set => CheckMaxNumber(value, minInterVertWords);
         }
 
         public int MinNumberSameWord
         {
             get => minNumberSameWord;
-            set => CheckMinNumber(value);
+            private set => CheckMinNumber(value);
         }
 
         public int MaxNumberSameWord
         {
             get => maxNumberSameWord;
-            set => CheckMaxNumber(value, minNumberSameWord);
+            private set => CheckMaxNumber(value, minNumberSameWord);
         }
 
         public int MinNumberOfGroups
         {
             get => minNumberOfGroups;
-            set => CheckMinNumber(value);
+            private set => CheckMinNumber(value);
         }
 
         public int MaxNumberOfGroups
         {
             get => maxNumberOfGroups;
-            set => CheckMaxNumber(value, minNumberOfGroups);
+            private set => CheckMaxNumber(value, minNumberOfGroups);
         }
 
         public int PointsPerWord
         {
             get => pointsPerWord;
-            set => CheckMinNumber(value);
+            private set => CheckMinNumber(value);
         }
 
         public string InterPointsPerLetter
         {
             get => interPointsPerLetter;
             //TODO Implement an array list to check each pair of letters and points
-            set => interPointsPerLetter = value;
+            private set => interPointsPerLetter = value;
         }
 
         public string NonInterPointsPerLetter
         {
             get => nonInterPointsPerLetter;
             //TODO Implement an array list to check each pair of letters and points
-            set => nonInterPointsPerLetter = value;
+            private set => nonInterPointsPerLetter = value;
         }
 
         #endregion

@@ -37,9 +37,12 @@ namespace CrozzleApp.Classes
 
         //OpenFileDialog pass TXT as a parameter in Crozzle class
 
-        public Crozzle(string file)
+        public Crozzle(int rows, int cols)
         {
-            ReadFile(file);
+
+            this.rows = rows;
+            this.columns = cols;
+            //ReadFile(file);
             configuration = new Configuration(configFile);
             wordList = new Words(wordListFile);
             grid = new Grid(rows, columns);
