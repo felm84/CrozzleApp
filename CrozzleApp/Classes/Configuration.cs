@@ -77,20 +77,20 @@ namespace CrozzleApp.Classes
 
         public Configuration(string file)
         {
-            readFile(file);
+            ReadFile(file);
         }
 
         #region ENCAPSULATION
         public int MinNumberUniqWords
         {
             get => minNumberUniqWords;
-            set => checkMinNumber(value);
+            set => CheckMinNumber(value);
         }
 
         public int MaxNumberUniqWords
         {
             get => maxNumberUniqWords;
-            set => checkMaxNumber(value, minNumberUniqWords);
+            set => CheckMaxNumber(value, minNumberUniqWords);
         }
 
         public string InvalidCrozzleScore
@@ -129,115 +129,115 @@ namespace CrozzleApp.Classes
         public string BgColorEmpty
         {
             get => bgColorEmpty;
-            set => checkColorData(value);
+            set => CheckColorData(value);
         }
 
         public string BgColorNonEmpty
         {
             get => bgColorNonEmpty;
-            set => checkColorData(value);
+            set => CheckColorData(value);
         }
 
         public int MinNumberRows
         {
             get => minNumberRows;
-            set => checkMinNumber(value);
+            set => CheckMinNumber(value);
         }
 
         public int MaxNumberRows
         {
             get => maxNumberRows;
-            set => checkMaxNumber(value, minNumberRows);
+            set => CheckMaxNumber(value, minNumberRows);
         }
 
         public int MinNumberCol
         {
             get => minNumberCol;
-            set => checkMinNumber(value);
+            set => CheckMinNumber(value);
         }
 
         public int MaxNumberCol
         {
             get => maxNumberCol;
-            set => checkMaxNumber(value, minNumberCol);
+            set => CheckMaxNumber(value, minNumberCol);
         }
 
         public int MinHorzWords
         {
             get => minHorzWords;
-            set => checkMinNumber(value);
+            set => CheckMinNumber(value);
         }
 
         public int MaxHorzWords
         {
             get => maxHorzWords;
-            set => checkMaxNumber(value, minHorzWords);
+            set => CheckMaxNumber(value, minHorzWords);
         }
 
         public int MinVertWords
         {
             get => minVertWords;
-            set => checkMinNumber(value);
+            set => CheckMinNumber(value);
         }
 
         public int MaxVertWords
         {
             get => maxVertWords;
-            set => checkMaxNumber(value, minVertWords);
+            set => CheckMaxNumber(value, minVertWords);
         }
 
         public int MinInterHorzWords
         {
             get => minInterHorzWords;
-            set => checkMinNumber(value);
+            set => CheckMinNumber(value);
         }
 
         public int MaxInterHorzWords
         {
             get => maxInterHorzWords;
-            set => checkMaxNumber(value, minInterHorzWords);
+            set => CheckMaxNumber(value, minInterHorzWords);
         }
 
         public int MinInterVertWords
         {
             get => minInterVertWords;
-            set => checkMinNumber(value);
+            set => CheckMinNumber(value);
         }
 
         public int MaxInterVertWords
         {
             get => maxInterVertWords;
-            set => checkMaxNumber(value, minInterVertWords);
+            set => CheckMaxNumber(value, minInterVertWords);
         }
 
         public int MinNumberSameWord
         {
             get => minNumberSameWord;
-            set => checkMinNumber(value);
+            set => CheckMinNumber(value);
         }
 
         public int MaxNumberSameWord
         {
             get => maxNumberSameWord;
-            set => checkMaxNumber(value, minNumberSameWord);
+            set => CheckMaxNumber(value, minNumberSameWord);
         }
 
         public int MinNumberOfGroups
         {
             get => minNumberOfGroups;
-            set => checkMinNumber(value);
+            set => CheckMinNumber(value);
         }
 
         public int MaxNumberOfGroups
         {
             get => maxNumberOfGroups;
-            set => checkMaxNumber(value, minNumberOfGroups);
+            set => CheckMaxNumber(value, minNumberOfGroups);
         }
 
         public int PointsPerWord
         {
             get => pointsPerWord;
-            set => checkMinNumber(value);
+            set => CheckMinNumber(value);
         }
 
         public string InterPointsPerLetter
@@ -257,7 +257,7 @@ namespace CrozzleApp.Classes
         #endregion
 
         // @checkMinNumber checks any int value for Minimum number data.
-        private int checkMinNumber(int value)
+        private int CheckMinNumber(int value)
         {
             if ((value.GetType() == typeof(int)) && (value > 0))
             {
@@ -269,7 +269,7 @@ namespace CrozzleApp.Classes
             }
         }
 
-        private int checkMaxNumber(int value, int minNumber)
+        private int CheckMaxNumber(int value, int minNumber)
         {
             if ((value.GetType() == typeof(int)) && (value > minNumber))
             {
@@ -281,7 +281,7 @@ namespace CrozzleApp.Classes
             }
         }
 
-        private string checkColorData(string value)
+        private string CheckColorData(string value)
         {
             // Regex matches value starting with 
             // # then values from a-f or 0-9 within 6 digits
@@ -298,12 +298,12 @@ namespace CrozzleApp.Classes
         }
 
         #region CONFIGURATION METHODS
-        public void readFile(string file)
+        public void ReadFile(string file)
         {
 
         }
 
-        public void validateFile()
+        public void ValidateFile()
         {
 
         }

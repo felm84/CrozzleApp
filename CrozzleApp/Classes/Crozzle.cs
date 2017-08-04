@@ -32,20 +32,20 @@ namespace CrozzleApp.Classes
         private int rows;
         private int columns;
 
-        public int Rows { get => rows; private set => checkNumber(value); }
-        public int Columns { get => columns; private set => checkNumber(value); }
+        public int Rows { get => rows; private set => CheckNumber(value); }
+        public int Columns { get => columns; private set => CheckNumber(value); }
 
         //OpenFileDialog pass TXT as a parameter in Crozzle class
 
         public Crozzle(string file)
         {
-            readFile(file);
+            ReadFile(file);
             configuration = new Configuration(configFile);
             wordList = new Words(wordListFile);
             grid = new Grid(rows, columns);
         }
 
-        private int checkNumber(int value)
+        private int CheckNumber(int value)
         {
             if ((value.GetType() == typeof(int)) && (value > 0))
             {
@@ -58,18 +58,18 @@ namespace CrozzleApp.Classes
         }
 
         #region CROZZLE METHODS
-        private void readFile(string file)
+        private void ReadFile(string file)
         {
 
-            validateFile();
+            ValidateFile();
         }
 
-        private void validateFile()
+        private void ValidateFile()
         {
 
         }
 
-        private void validadeCrozzle()
+        private void ValidadeCrozzle()
         {
 
         }
