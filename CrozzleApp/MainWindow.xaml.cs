@@ -22,6 +22,8 @@ namespace CrozzleApp
     /// </summary>
     public partial class MainWindow : Window
     {
+        OpenFileDialog openFile = new OpenFileDialog();
+
         public MainWindow()
         {
             InitializeComponent();
@@ -30,8 +32,17 @@ namespace CrozzleApp
         // Event handler from Open file menu
         private void OpenFile_Click(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog openFile = new OpenFileDialog();
-            openFile.ShowDialog();
+            openFile.Filter = "Text file (*.txt) | *.txt";
+            if (openFile.ShowDialog() == true)
+            {
+                string file = openFile.FileName;
+                fileName.Text = file;
+                Crozzle crozzle = new Crozzle(file);
+            }
+            else
+            {
+                fileName.Text = "Felipe";
+            }
         }
 
         private void Exit_Click(object sender, RoutedEventArgs e)

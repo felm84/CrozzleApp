@@ -1,17 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace CrozzleApp.Classes
 {
     class Crozzle
     {
-        /*
-         * 
-         */
-
         // Configuraton file.
         private string configFile;
 
@@ -32,17 +30,16 @@ namespace CrozzleApp.Classes
         private int rows;
         private int columns;
 
-        public int Rows { get => rows; private set => CheckNumber(value); }
-        public int Columns { get => columns; private set => CheckNumber(value); }
+        public int Rows { get => rows; private set => rows = CheckNumber(value); }
+        public int Columns { get => columns; private set => columns = CheckNumber(value); }
 
         //OpenFileDialog pass TXT as a parameter in Crozzle class
 
-        public Crozzle(int rows, int cols)
-        {
+        public Crozzle(string file)
+        {            
+            ReadFile(file);
 
-            this.rows = rows;
-            this.columns = cols;
-            //ReadFile(file);
+
             configuration = new Configuration(configFile);
             wordList = new Words(wordListFile);
             grid = new Grid(rows, columns);
@@ -61,12 +58,38 @@ namespace CrozzleApp.Classes
         }
 
         #region CROZZLE METHODS
+        //TODO ReadFile here, use system IO
         private void ReadFile(string file)
         {
+            try
+            {
+                using (StreamReader sr = new StreamReader(file))
+                {
+                    string line;
+                    while ((line = sr.ReadLine()) != null)
+                    {
+                        if (string.IsNullOrEmpty(line))
+                        {
+                            continue;
+                        } else
+                        {
+                            System.Diagnostics.Debug.WriteLine(line);
+                        }
+                        
+                    }
+                    
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
 
-            ValidateFile();
+
+            //ValidateFile();
         }
 
+        //TODO Validate itens
         private void ValidateFile()
         {
 

@@ -65,7 +65,14 @@
         </ToolBarTray>
         <WebBrowser Height="454"
                     VerticalAlignment="Top"
-                    Width="543"
+                    Width="437"
                     Margin="0,5,0,0" />
+        <TextBox x:Name="fileName"
+                 Height="30"
+                 TextWrapping="Wrap"
+                 Text="TextBox"
+                 VerticalAlignment="Top"
+                 Width="120" />
     </DockPanel>
+    
 </Window>

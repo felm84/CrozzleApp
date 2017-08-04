@@ -84,19 +84,19 @@ namespace CrozzleApp.Classes
         public int MinNumberUniqWords
         {
             get => minNumberUniqWords;
-            private set => CheckMinNumber(value);
+            private set => minNumberUniqWords = CheckMinNumber(value);
         }
 
         public int MaxNumberUniqWords
         {
             get => maxNumberUniqWords;
-            private set => CheckMaxNumber(value, minNumberUniqWords);
+            private set => maxNumberUniqWords = CheckMaxNumber(value, minNumberUniqWords);
         }
 
         public string InvalidCrozzleScore
         {
             get => invalidCrozzleScore;
-            set
+            private set
             {
                 if (value.GetType() == typeof(string))
                 {
@@ -112,7 +112,7 @@ namespace CrozzleApp.Classes
         public bool Uppercase
         {
             get => uppercase;
-            set
+            private set
             {
                 if (value.GetType() == typeof(bool))
                 {
@@ -126,118 +126,124 @@ namespace CrozzleApp.Classes
             }
         }
 
+        public string Style
+        {
+            get => style;
+            private set => style = value;
+        }
+
         public string BgColorEmpty
         {
             get => bgColorEmpty;
-            private set => CheckColorData(value);
+            private set => bgColorEmpty = CheckColorData(value);
         }
 
         public string BgColorNonEmpty
         {
             get => bgColorNonEmpty;
-            private set => CheckColorData(value);
+            private set => bgColorNonEmpty = CheckColorData(value);
         }
 
         public int MinNumberRows
         {
             get => minNumberRows;
-            private set => CheckMinNumber(value);
+            private set => minNumberRows = CheckMinNumber(value);
         }
 
         public int MaxNumberRows
         {
             get => maxNumberRows;
-            private set => CheckMaxNumber(value, minNumberRows);
+            private set => maxNumberRows = CheckMaxNumber(value, minNumberRows);
         }
 
         public int MinNumberCol
         {
             get => minNumberCol;
-            private set => CheckMinNumber(value);
+            private set => minNumberCol = CheckMinNumber(value);
         }
 
         public int MaxNumberCol
         {
             get => maxNumberCol;
-            private set => CheckMaxNumber(value, minNumberCol);
+            private set => maxNumberCol = CheckMaxNumber(value, minNumberCol);
         }
 
         public int MinHorzWords
         {
             get => minHorzWords;
-            private set => CheckMinNumber(value);
+            private set => minHorzWords = CheckMinNumber(value);
         }
 
         public int MaxHorzWords
         {
             get => maxHorzWords;
-            private set => CheckMaxNumber(value, minHorzWords);
+            private set => maxHorzWords = CheckMaxNumber(value, minHorzWords);
         }
 
         public int MinVertWords
         {
             get => minVertWords;
-            private set => CheckMinNumber(value);
+            private set => minVertWords = CheckMinNumber(value);
         }
 
         public int MaxVertWords
         {
             get => maxVertWords;
-            private set => CheckMaxNumber(value, minVertWords);
+            private set => maxVertWords = CheckMaxNumber(value, minVertWords);
         }
 
         public int MinInterHorzWords
         {
             get => minInterHorzWords;
-            private set => CheckMinNumber(value);
+            private set => minInterHorzWords = CheckMinNumber(value);
         }
 
         public int MaxInterHorzWords
         {
             get => maxInterHorzWords;
-            private set => CheckMaxNumber(value, minInterHorzWords);
+            private set => maxInterHorzWords = CheckMaxNumber(value, minInterHorzWords);
         }
 
         public int MinInterVertWords
         {
             get => minInterVertWords;
-            private set => CheckMinNumber(value);
+            private set => minInterVertWords = CheckMinNumber(value);
         }
 
         public int MaxInterVertWords
         {
             get => maxInterVertWords;
-            private set => CheckMaxNumber(value, minInterVertWords);
+            private set => maxInterVertWords = CheckMaxNumber(value, minInterVertWords);
         }
 
         public int MinNumberSameWord
         {
             get => minNumberSameWord;
-            private set => CheckMinNumber(value);
+            private set => minNumberSameWord = CheckMinNumber(value);
         }
 
         public int MaxNumberSameWord
         {
             get => maxNumberSameWord;
-            private set => CheckMaxNumber(value, minNumberSameWord);
+            private set => maxNumberSameWord = CheckMaxNumber(value, minNumberSameWord);
         }
 
         public int MinNumberOfGroups
         {
             get => minNumberOfGroups;
-            private set => CheckMinNumber(value);
+            private set => minNumberOfGroups = CheckMinNumber(value);
         }
 
         public int MaxNumberOfGroups
         {
             get => maxNumberOfGroups;
-            private set => CheckMaxNumber(value, minNumberOfGroups);
+            private set => maxNumberOfGroups = CheckMaxNumber(value, minNumberOfGroups);
         }
 
         public int PointsPerWord
         {
             get => pointsPerWord;
-            private set => CheckMinNumber(value);
+            private set => pointsPerWord = CheckMinNumber(value);
         }
 
         public string InterPointsPerLetter
@@ -256,7 +262,7 @@ namespace CrozzleApp.Classes
 
         #endregion
 
-        // @checkMinNumber checks any int value for Minimum number data.
+        // @CheckMinNumber checks any int value for Minimum number data.
         private int CheckMinNumber(int value)
         {
             if ((value.GetType() == typeof(int)) && (value > 0))
