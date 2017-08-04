@@ -5,8 +5,67 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CrozzleApp"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
-    <Grid>
-        
-    </Grid>
+        Title="Crozzle"
+        Icon="Resources/favicon.ico">
+    <Window.Resources>
+
+    </Window.Resources>
+    <DockPanel>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="_File">
+                <MenuItem x:Name="menuOpen"
+                          Header="_Open"
+                          InputGestureText="Ctrl+O"
+                          Click="OpenFile_Click">
+                    <MenuItem.Icon>
+                        <Image Source="Resources/open_folder.png" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <Separator />
+                <MenuItem x:Name="menuClose"
+                          Header="_Exit"
+                          InputGestureText="Ctrl+Q"
+                          Click="Exit_Click">
+                    <MenuItem.Icon>
+                        <Image Source="Resources/close_folder.png" />
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
+
+            <MenuItem Header="_Check">
+                <MenuItem x:Name="menuCheck"
+                          Header="_Check File"
+                          InputGestureText="Ctrl+F">
+                    <MenuItem.Icon>
+                        <Image Source="Resources/check_file.png" />
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
+
+            <MenuItem Header="_Help">
+                <MenuItem x:Name="menuHelp"
+                          Header="_Help"
+                          InputGestureText="F1">
+                </MenuItem>
+                <Separator />
+                <MenuItem x:Name="menuAbout"
+                          Header="_About">
+                </MenuItem>
+            </MenuItem>
+        </Menu>
+
+        <ToolBarTray DockPanel.Dock="Top">
+            <ToolBar>
+                <Button x:Name="tbOpen"
+                        ToolTip="Open File"
+                        Click="OpenFile_Click">
+                    <Image Source="Resources/open_folder.png" />
+                </Button>
+            </ToolBar>
+        </ToolBarTray>
+        <WebBrowser Height="454"
+                    VerticalAlignment="Top"
+                    Width="543"
+                    Margin="0,5,0,0" />
+    </DockPanel>
 </Window>
