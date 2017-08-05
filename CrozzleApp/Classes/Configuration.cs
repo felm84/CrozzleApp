@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -10,6 +11,13 @@ namespace CrozzleApp.Classes
     class Configuration
     {
         #region PRIVATE VARIABLES
+        /* 
+         * Dictionary organizes key value 
+         * pairs to be used in ValidadeFile
+         * and ValidadeCrozzle
+        */
+        private Dictionary<string, string> lines = new Dictionary<string, string>();
+
         // Limits on the size of the word list.
         private int minNumberUniqWords;
         private int maxNumberUniqWords;
@@ -78,52 +86,32 @@ namespace CrozzleApp.Classes
         public Configuration(string file)
         {
             ReadFile(file);
+            ValidateFile();
         }
 
         #region ENCAPSULATION
         public int MinNumberUniqWords
         {
             get => minNumberUniqWords;
-            private set => minNumberUniqWords = CheckMinNumber(value);
+            private set => minNumberUniqWords = value;
         }
 
         public int MaxNumberUniqWords
         {
             get => maxNumberUniqWords;
-            private set => maxNumberUniqWords = CheckMaxNumber(value, minNumberUniqWords);
+            private set => maxNumberUniqWords = value;
         }
 
         public string InvalidCrozzleScore
         {
             get => invalidCrozzleScore;
-            private set
-            {
-                if (value.GetType() == typeof(string))
-                {
-                    invalidCrozzleScore = value;
-                }
-                else
-                {
-                    //TODO Implement error
-                }
-            }
+            private set => invalidCrozzleScore = value;
         }
 
         public bool Uppercase
         {
             get => uppercase;
-            private set
-            {
-                if (value.GetType() == typeof(bool))
-                {
-                    uppercase = value;
-                }
-                else
-                {
-                    //TODO Implement error
-                }
-
-            }
+            private set => uppercase = value;
         }
 
         public string Style
@@ -135,156 +123,194 @@ namespace CrozzleApp.Classes
         public string BgColorEmpty
         {
             get => bgColorEmpty;
-            private set => bgColorEmpty = CheckColorData(value);
+            private set => bgColorEmpty = value;
         }
 
         public string BgColorNonEmpty
         {
             get => bgColorNonEmpty;
-            private set => bgColorNonEmpty = CheckColorData(value);
+            private set => bgColorNonEmpty = value;
         }
 
         public int MinNumberRows
         {
             get => minNumberRows;
-            private set => minNumberRows = CheckMinNumber(value);
+            private set => minNumberRows = value;
         }
 
         public int MaxNumberRows
         {
             get => maxNumberRows;
-            private set => maxNumberRows = CheckMaxNumber(value, minNumberRows);
+            private set => maxNumberRows = value;
         }
 
         public int MinNumberCol
         {
             get => minNumberCol;
-            private set => minNumberCol = CheckMinNumber(value);
+            private set => minNumberCol = value;
         }
 
         public int MaxNumberCol
         {
             get => maxNumberCol;
-            private set => maxNumberCol = CheckMaxNumber(value, minNumberCol);
+            private set => maxNumberCol = value;
         }
 
         public int MinHorzWords
         {
             get => minHorzWords;
-            private set => minHorzWords = CheckMinNumber(value);
+            private set => minHorzWords = value;
         }
 
         public int MaxHorzWords
         {
             get => maxHorzWords;
-            private set => maxHorzWords = CheckMaxNumber(value, minHorzWords);
+            private set => maxHorzWords = value;
         }
 
         public int MinVertWords
         {
             get => minVertWords;
-            private set => minVertWords = CheckMinNumber(value);
+            private set => minVertWords = value;
         }
 
         public int MaxVertWords
         {
             get => maxVertWords;
-            private set => maxVertWords = CheckMaxNumber(value, minVertWords);
+            private set => maxVertWords = value;
         }
 
         public int MinInterHorzWords
         {
             get => minInterHorzWords;
-            private set => minInterHorzWords = CheckMinNumber(value);
+            private set => minInterHorzWords = value;
         }
 
         public int MaxInterHorzWords
         {
             get => maxInterHorzWords;
-            private set => maxInterHorzWords = CheckMaxNumber(value, minInterHorzWords);
+            private set => maxInterHorzWords = value;
         }
 
         public int MinInterVertWords
         {
             get => minInterVertWords;
-            private set => minInterVertWords = CheckMinNumber(value);
+            private set => minInterVertWords = value;
         }
 
         public int MaxInterVertWords
         {
             get => maxInterVertWords;
-            private set => maxInterVertWords = CheckMaxNumber(value, minInterVertWords);
+            private set => maxInterVertWords = value;
         }
 
         public int MinNumberSameWord
         {
             get => minNumberSameWord;
-            private set => minNumberSameWord = CheckMinNumber(value);
+            private set => minNumberSameWord = value;
         }
 
         public int MaxNumberSameWord
         {
             get => maxNumberSameWord;
-            private set => maxNumberSameWord = CheckMaxNumber(value, minNumberSameWord);
+            private set => maxNumberSameWord = value;
         }
 
         public int MinNumberOfGroups
         {
             get => minNumberOfGroups;
-            private set => minNumberOfGroups = CheckMinNumber(value);
+            private set => minNumberOfGroups = value;
         }
 
         public int MaxNumberOfGroups
         {
             get => maxNumberOfGroups;
-            private set => maxNumberOfGroups = CheckMaxNumber(value, minNumberOfGroups);
+            private set => maxNumberOfGroups = value;
         }
 
         public int PointsPerWord
         {
             get => pointsPerWord;
-            private set => pointsPerWord = CheckMinNumber(value);
+            private set => pointsPerWord = value;
         }
 
         public string InterPointsPerLetter
         {
             get => interPointsPerLetter;
-            //TODO Implement an array list to check each pair of letters and points
             private set => interPointsPerLetter = value;
         }
 
         public string NonInterPointsPerLetter
         {
             get => nonInterPointsPerLetter;
-            //TODO Implement an array list to check each pair of letters and points
             private set => nonInterPointsPerLetter = value;
         }
 
         #endregion
 
+
+
         // @CheckMinNumber checks any int value for Minimum number data.
-        private int CheckMinNumber(int value)
+        private int CheckMinNumber(string value)
         {
-            if ((value.GetType() == typeof(int)) && (value > 0))
+            int number = 0;
+            try
             {
-                return value;
+                number = int.Parse(value);
+                if (number < 1)
+                {
+                    // TODO Attach this error to a Window Dialog
+                    throw new Exception("Value is negative");
+                }
             }
-            else
+            catch (Exception ex)
             {
-                return -1;
+                Console.WriteLine(ex.Message);
             }
+            return number;
         }
 
-        private int CheckMaxNumber(int value, int minNumber)
+        private int CheckMaxNumber(string value, int minNumber)
         {
-            if ((value.GetType() == typeof(int)) && (value > minNumber))
+            int number = 0;
+            try
             {
-                return value;
+                number = int.Parse(value);
+                if (minNumber == 0)
+                {
+                    throw new Exception("Minimum value not available");
+                }
+                else if (number < 1)
+                {
+                    // TODO Attach this error to a Window Dialog
+                    throw new Exception("Value is negative");
+                }
+                else if (number < minNumber)
+                {
+                    // TODO Attach this error to a Window Dialog
+                    throw new Exception("Value is smaller than minimum value");
+                }
             }
-            else
+            catch (Exception ex)
             {
-                return -1;
+                Console.WriteLine(ex.Message);
             }
+            return number;
+        }
+
+        private bool CheckBool(string value)
+        {
+            bool result = true;
+            try
+            {
+                result = bool.Parse(value);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+            return result;
         }
 
         private string CheckColorData(string value)
@@ -299,19 +325,134 @@ namespace CrozzleApp.Classes
             else
             {
                 //TODO Implement error
-                return "Error";
+                return "Error: Color not available";
             }
         }
 
         #region CONFIGURATION METHODS
-        public void ReadFile(string file)
+        private void ReadFile(string file)
         {
+            try
+            {
+                using (StreamReader sr = new StreamReader(file))
+                {
+                    string line;
 
+                    while ((line = sr.ReadLine()) != null)
+                    {
+                        int index = line.IndexOf(@"//");
+
+                        if (index >= 0)
+                        {
+                            line = line.Remove(index);
+                            line = line.Trim();
+                        }
+                        if (string.IsNullOrEmpty(line) || line.StartsWith(@"//"))
+                        {
+                            continue;
+                        }
+
+                        string[] keyValuePair = line.Split(new char[] { '=' });
+
+                        /* TODO Fix ReadFile to adapt NON_INTERSECTING_POINTS_PER_LETTER
+                         * and INTERSECTING_POINTS_PER_LETTER into another Dictionary.
+                        */
+                        lines.Add(keyValuePair[0], keyValuePair[1]);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
         }
 
         public void ValidateFile()
         {
-
+            foreach (KeyValuePair<string, string> pair in lines)
+            {
+                switch (pair.Key)
+                {
+                    case "MINIMUM_NUMBER_OF_UNIQUE_WORDS":
+                        MinNumberUniqWords = CheckMinNumber(pair.Value);
+                        break;
+                    case "MAXIMUM_NUMBER_OF_UNIQUE_WORDS":
+                        MaxNumberUniqWords = CheckMaxNumber(pair.Value, minNumberUniqWords);
+                        break;
+                    case "INVALID_CROZZLE_SCORE":
+                        InvalidCrozzleScore = pair.Value;
+                        break;
+                    case "UPPERCASE":
+                        Uppercase = CheckBool(pair.Value);
+                        break;
+                    case "STYLE":
+                        Style = pair.Value;
+                        break;
+                    case "BGCOLOUR_EMPTY_TD":
+                        BgColorEmpty = CheckColorData(pair.Value);
+                        break;
+                    case "BGCOLOUR_NON_EMPTY_TD":
+                        BgColorNonEmpty = CheckColorData(pair.Value);
+                        break;
+                    case "MINIMUM_NUMBER_OF_ROWS":
+                        MinNumberRows = CheckMinNumber(pair.Value);
+                        break;
+                    case "MAXIMUM_NUMBER_OF_ROWS":
+                        MaxNumberRows = CheckMaxNumber(pair.Value, minNumberRows);
+                        break;
+                    case "MINIMUM_NUMBER_OF_COLUMNS":
+                        MinNumberCol = CheckMinNumber(pair.Value);
+                        break;
+                    case "MAXIMUM_NUMBER_OF_COLUMNS":
+                        MaxNumberCol = CheckMaxNumber(pair.Value, minNumberCol);
+                        break;
+                    case "MINIMUM_HORIZONTAL_WORDS":
+                        MinHorzWords = CheckMinNumber(pair.Value);
+                        break;
+                    case "MAXIMUM_HORIZONTAL_WORDS":
+                        MaxHorzWords = CheckMaxNumber(pair.Value, minHorzWords);
+                        break;
+                    case "MINIMUM_VERTICAL_WORDS":
+                        MinVertWords = CheckMinNumber(pair.Value);
+                        break;
+                    case "MAXIMUM_VERTICAL_WORDS":
+                        MaxVertWords = CheckMaxNumber(pair.Value, minVertWords);
+                        break;
+                    case "MINIMUM_INTERSECTIONS_IN_HORIZONTAL_WORDS":
+                        MinInterHorzWords = CheckMinNumber(pair.Value);
+                        break;
+                    case "MAXIMUM_INTERSECTIONS_IN_HORIZONTAL_WORDS":
+                        MaxInterHorzWords = CheckMaxNumber(pair.Value, minInterHorzWords);
+                        break;
+                    case "MINIMUM_INTERSECTIONS_IN_VERTICAL_WORDS":
+                        MinInterVertWords = CheckMinNumber(pair.Value);
+                        break;
+                    case "MAXIMUM_INTERSECTIONS_IN_VERTICAL_WORDS":
+                        MaxInterVertWords = CheckMaxNumber(pair.Value, minInterVertWords);
+                        break;
+                    case "MINIMUM_NUMBER_OF_THE_SAME_WORD":
+                        MinNumberSameWord = CheckMinNumber(pair.Value);
+                        break;
+                    case "MAXIMUM_NUMBER_OF_THE_SAME_WORD":
+                        MaxNumberSameWord = CheckMaxNumber(pair.Value, minNumberSameWord);
+                        break;
+                    case "MINIMUM_NUMBER_OF_GROUPS":
+                        MinNumberOfGroups = CheckMinNumber(pair.Value);
+                        break;
+                    case "MAXIMUM_NUMBER_OF_GROUPS":
+                        MaxNumberOfGroups = CheckMaxNumber(pair.Value, minNumberOfGroups);
+                        break;
+                    case "POINTS_PER_WORD":
+                        PointsPerWord = CheckMinNumber(pair.Value);
+                        break;
+                    case "INTERSECTING_POINTS_PER_LETTER":
+                        InterPointsPerLetter = pair.Value;
+                        break;
+                    case "NON_INTERSECTING_POINTS_PER_LETTER":
+                        NonInterPointsPerLetter = pair.Value;
+                        break;
+                }
+            }
         }
 
         #endregion

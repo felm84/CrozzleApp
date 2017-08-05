@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -10,17 +11,21 @@ namespace CrozzleApp.Classes
 {
     class Crozzle
     {
-        // Configuraton file.
-        private string configFile;
-
-        // Word list file.
-        private string wordListFile;
-
+        // Create a Configuration object
         Configuration configuration;
 
+        // Create a Words object
         Words wordList;
 
+        // Create a Grid object
         Grid grid;
+
+        /* 
+         * Dictionary organizes key value 
+         * pairs to be used in ValidadeFile
+         * and ValidadeCrozzle
+        */
+        private Dictionary<string, string> lines = new Dictionary<string, string>();
 
         /* 
          * Crozzle Size.
@@ -30,31 +35,37 @@ namespace CrozzleApp.Classes
         private int rows;
         private int columns;
 
-        public int Rows { get => rows; private set => rows = CheckNumber(value); }
-        public int Columns { get => columns; private set => columns = CheckNumber(value); }
+        private string root;
+        private string filePath;
+
+        public int Rows { get => rows; private set => rows = value; }
+        public int Columns { get => columns; private set => columns = value; }
 
         //OpenFileDialog pass TXT as a parameter in Crozzle class
-
         public Crozzle(string file)
-        {            
+        {
+            root = Path.GetDirectoryName(file);
             ReadFile(file);
-
-
-            configuration = new Configuration(configFile);
-            wordList = new Words(wordListFile);
-            grid = new Grid(rows, columns);
+            ValidateFile();
+            ValidadeCrozzle();
         }
 
-        private int CheckNumber(int value)
+        private int CheckNumber(string value)
         {
-            if ((value.GetType() == typeof(int)) && (value > 0))
+            int number = 0;
+            try
             {
-                return value;
+                number = int.Parse(value);
+                if (number < 1)
+                {
+                    throw new Exception("Value is 0");
+                }
             }
-            else
+            catch (Exception ex)
             {
-                return -1;
+                Console.WriteLine(ex.Message);
             }
+            return number;
         }
 
         #region CROZZLE METHODS
@@ -66,38 +77,64 @@ namespace CrozzleApp.Classes
                 using (StreamReader sr = new StreamReader(file))
                 {
                     string line;
+
                     while ((line = sr.ReadLine()) != null)
                     {
-                        if (string.IsNullOrEmpty(line))
+                        line = line.Replace("\"", "");
+                        int index = line.IndexOf(@"//");
+
+                        if (index >= 0)
+                        {
+                            line = line.Remove(index);
+                            line = line.Trim();
+                        }
+                        if (string.IsNullOrEmpty(line) || line.StartsWith(@"//"))
                         {
                             continue;
-                        } else
-                        {
-                            System.Diagnostics.Debug.WriteLine(line);
                         }
                         
+                        string[] keyValuePair = line.Split(new char[] { '=' });
+                        lines.Add(keyValuePair[0], keyValuePair[1]);                         
                     }
-                    
                 }
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }
-
-
-            //ValidateFile();
         }
 
         //TODO Validate itens
         private void ValidateFile()
         {
-
+            foreach (KeyValuePair<string, string> pair in lines)
+            {
+                switch(pair.Key)
+                {
+                    case "CONFIGURATION_FILE":
+                        filePath = root + (pair.Value).Remove(0, 1);
+                        configuration = new Configuration(filePath);
+                        break;
+                    case "WORDLIST_FILE":
+                        filePath = root + pair.Value.Remove(0, 1);
+                        wordList = new Words(filePath);
+                        break;
+                    case "ROWS":
+                        Rows = CheckNumber(pair.Value);
+                        break;
+                    case "COLUMNS":
+                        Columns = CheckNumber(pair.Value);
+                        break;
+                        // TODO Explode each ROW to call GRID
+                        // TODO Explode each COLUMN to call GRID
+                }
+            }
         }
 
         private void ValidadeCrozzle()
         {
-
+            // TODO Implement if valid then instatiate the Grid class
+            grid = new Grid(rows, columns);
         }
         #endregion
     }
