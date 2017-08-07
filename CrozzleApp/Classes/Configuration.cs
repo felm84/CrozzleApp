@@ -251,7 +251,7 @@ namespace CrozzleApp.Classes
 
 
         // @CheckMinNumber checks any int value for Minimum number data.
-        private int CheckMinNumber(string value)
+        private int CheckMinNumber(string key, string value)
         {
             int number = 0;
             try
@@ -270,7 +270,7 @@ namespace CrozzleApp.Classes
             return number;
         }
 
-        private int CheckMaxNumber(string value, int minNumber)
+        private int CheckMaxNumber(string key, string value, int minNumber)
         {
             int number = 0;
             try
@@ -374,10 +374,10 @@ namespace CrozzleApp.Classes
                 switch (pair.Key)
                 {
                     case "MINIMUM_NUMBER_OF_UNIQUE_WORDS":
-                        MinNumberUniqWords = CheckMinNumber(pair.Value);
+                        MinNumberUniqWords = CheckMinNumber(pair.Key, pair.Value);
                         break;
                     case "MAXIMUM_NUMBER_OF_UNIQUE_WORDS":
-                        MaxNumberUniqWords = CheckMaxNumber(pair.Value, minNumberUniqWords);
+                        MaxNumberUniqWords = CheckMaxNumber(pair.Key, pair.Value, minNumberUniqWords);
                         break;
                     case "INVALID_CROZZLE_SCORE":
                         InvalidCrozzleScore = pair.Value;
@@ -395,55 +395,55 @@ namespace CrozzleApp.Classes
                         BgColorNonEmpty = CheckColorData(pair.Value);
                         break;
                     case "MINIMUM_NUMBER_OF_ROWS":
-                        MinNumberRows = CheckMinNumber(pair.Value);
+                        MinNumberRows = CheckMinNumber(pair.Key, pair.Value);
                         break;
                     case "MAXIMUM_NUMBER_OF_ROWS":
-                        MaxNumberRows = CheckMaxNumber(pair.Value, minNumberRows);
+                        MaxNumberRows = CheckMaxNumber(pair.Key, pair.Value, minNumberRows);
                         break;
                     case "MINIMUM_NUMBER_OF_COLUMNS":
-                        MinNumberCol = CheckMinNumber(pair.Value);
+                        MinNumberCol = CheckMinNumber(pair.Key, pair.Value);
                         break;
                     case "MAXIMUM_NUMBER_OF_COLUMNS":
-                        MaxNumberCol = CheckMaxNumber(pair.Value, minNumberCol);
+                        MaxNumberCol = CheckMaxNumber(pair.Key, pair.Value, minNumberCol);
                         break;
                     case "MINIMUM_HORIZONTAL_WORDS":
-                        MinHorzWords = CheckMinNumber(pair.Value);
+                        MinHorzWords = CheckMinNumber(pair.Key, pair.Value);
                         break;
                     case "MAXIMUM_HORIZONTAL_WORDS":
-                        MaxHorzWords = CheckMaxNumber(pair.Value, minHorzWords);
+                        MaxHorzWords = CheckMaxNumber(pair.Key, pair.Value, minHorzWords);
                         break;
                     case "MINIMUM_VERTICAL_WORDS":
-                        MinVertWords = CheckMinNumber(pair.Value);
+                        MinVertWords = CheckMinNumber(pair.Key, pair.Value);
                         break;
                     case "MAXIMUM_VERTICAL_WORDS":
-                        MaxVertWords = CheckMaxNumber(pair.Value, minVertWords);
+                        MaxVertWords = CheckMaxNumber(pair.Key, pair.Value, minVertWords);
                         break;
                     case "MINIMUM_INTERSECTIONS_IN_HORIZONTAL_WORDS":
-                        MinInterHorzWords = CheckMinNumber(pair.Value);
+                        MinInterHorzWords = CheckMinNumber(pair.Key, pair.Value);
                         break;
                     case "MAXIMUM_INTERSECTIONS_IN_HORIZONTAL_WORDS":
-                        MaxInterHorzWords = CheckMaxNumber(pair.Value, minInterHorzWords);
+                        MaxInterHorzWords = CheckMaxNumber(pair.Key, pair.Value, minInterHorzWords);
                         break;
                     case "MINIMUM_INTERSECTIONS_IN_VERTICAL_WORDS":
-                        MinInterVertWords = CheckMinNumber(pair.Value);
+                        MinInterVertWords = CheckMinNumber(pair.Key, pair.Value);
                         break;
                     case "MAXIMUM_INTERSECTIONS_IN_VERTICAL_WORDS":
-                        MaxInterVertWords = CheckMaxNumber(pair.Value, minInterVertWords);
+                        MaxInterVertWords = CheckMaxNumber(pair.Key, pair.Value, minInterVertWords);
                         break;
                     case "MINIMUM_NUMBER_OF_THE_SAME_WORD":
-                        MinNumberSameWord = CheckMinNumber(pair.Value);
+                        MinNumberSameWord = CheckMinNumber(pair.Key, pair.Value);
                         break;
                     case "MAXIMUM_NUMBER_OF_THE_SAME_WORD":
-                        MaxNumberSameWord = CheckMaxNumber(pair.Value, minNumberSameWord);
+                        MaxNumberSameWord = CheckMaxNumber(pair.Key, pair.Value, minNumberSameWord);
                         break;
                     case "MINIMUM_NUMBER_OF_GROUPS":
-                        MinNumberOfGroups = CheckMinNumber(pair.Value);
+                        MinNumberOfGroups = CheckMinNumber(pair.Key, pair.Value);
                         break;
                     case "MAXIMUM_NUMBER_OF_GROUPS":
-                        MaxNumberOfGroups = CheckMaxNumber(pair.Value, minNumberOfGroups);
+                        MaxNumberOfGroups = CheckMaxNumber(pair.Key, pair.Value, minNumberOfGroups);
                         break;
                     case "POINTS_PER_WORD":
-                        PointsPerWord = CheckMinNumber(pair.Value);
+                        PointsPerWord = CheckMinNumber(pair.Key, pair.Value);
                         break;
                     case "INTERSECTING_POINTS_PER_LETTER":
                         InterPointsPerLetter = pair.Value;

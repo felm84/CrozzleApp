@@ -11,6 +11,9 @@ namespace CrozzleApp.Classes
 {
     class Crozzle
     {
+        // Create a Log object
+        Log log;
+
         // Create a Configuration object
         Configuration configuration;
 
@@ -44,13 +47,14 @@ namespace CrozzleApp.Classes
         //OpenFileDialog pass TXT as a parameter in Crozzle class
         public Crozzle(string file)
         {
+            log = new Log();
             root = Path.GetDirectoryName(file);
             ReadFile(file);
             ValidateFile();
             ValidadeCrozzle();
         }
 
-        private int CheckNumber(string value)
+        private int CheckNumber(string key, string value)
         {
             int number = 0;
             try
@@ -58,7 +62,8 @@ namespace CrozzleApp.Classes
                 number = int.Parse(value);
                 if (number < 1)
                 {
-                    throw new Exception("Value is 0");
+                    Console.WriteLine("Key {0} has value {1}", key, number);
+                    //throw new Exception("Value is smaller than 1");
                 }
             }
             catch (Exception ex)
@@ -120,10 +125,10 @@ namespace CrozzleApp.Classes
                         wordList = new Words(filePath);
                         break;
                     case "ROWS":
-                        Rows = CheckNumber(pair.Value);
+                        Rows = CheckNumber(pair.Key, pair.Value);
                         break;
                     case "COLUMNS":
-                        Columns = CheckNumber(pair.Value);
+                        Columns = CheckNumber(pair.Key, pair.Value);
                         break;
                         // TODO Explode each ROW to call GRID
                         // TODO Explode each COLUMN to call GRID
