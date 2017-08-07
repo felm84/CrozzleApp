@@ -11,8 +11,8 @@ namespace CrozzleApp.Classes
 {
     class Crozzle
     {
-        // Create a Log object
-        Log log;
+        // Determines if the file is valid
+        private bool valid = true;
 
         // Create a Configuration object
         Configuration configuration;
@@ -24,11 +24,11 @@ namespace CrozzleApp.Classes
         Grid grid;
 
         /* 
-         * Dictionary organizes key value 
+         * List of KeyValuePair organizes key value 
          * pairs to be used in ValidadeFile
          * and ValidadeCrozzle
         */
-        private Dictionary<string, string> lines = new Dictionary<string, string>();
+        private List<KeyValuePair<string, string>> lines = new List<KeyValuePair<string, string>>();
 
         /* 
          * Crozzle Size.
@@ -43,11 +43,15 @@ namespace CrozzleApp.Classes
 
         public int Rows { get => rows; private set => rows = value; }
         public int Columns { get => columns; private set => columns = value; }
+        public bool Valid
+        {
+            get => valid;
+            private set => valid = value;
+        }
 
         //OpenFileDialog pass TXT as a parameter in Crozzle class
         public Crozzle(string file)
         {
-            log = new Log();
             root = Path.GetDirectoryName(file);
             ReadFile(file);
             ValidateFile();
@@ -62,13 +66,14 @@ namespace CrozzleApp.Classes
                 number = int.Parse(value);
                 if (number < 1)
                 {
-                    Console.WriteLine("Key {0} has value {1}", key, number);
-                    //throw new Exception("Value is smaller than 1");
+                    valid = false;
+                    Log.logs.Add(key + " has value smaller than 1: " + number);
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                valid = false;
+                Log.logs.Add(ex.Message);
             }
             return number;
         }
@@ -86,6 +91,9 @@ namespace CrozzleApp.Classes
                     while ((line = sr.ReadLine()) != null)
                     {
                         line = line.Replace("\"", "");
+
+                        line = line.Trim();
+
                         int index = line.IndexOf(@"//");
 
                         if (index >= 0)
@@ -99,13 +107,14 @@ namespace CrozzleApp.Classes
                         }
                         
                         string[] keyValuePair = line.Split(new char[] { '=' });
-                        lines.Add(keyValuePair[0], keyValuePair[1]);                         
+                        lines.Add(new KeyValuePair<string, string>(keyValuePair[0], keyValuePair[1]));
                     }
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                valid = false;
+                Log.logs.Add(ex.Message);
             }
         }
 
@@ -130,8 +139,12 @@ namespace CrozzleApp.Classes
                     case "COLUMNS":
                         Columns = CheckNumber(pair.Key, pair.Value);
                         break;
-                        // TODO Explode each ROW to call GRID
-                        // TODO Explode each COLUMN to call GRID
+                    // TODO Explode each ROW to call GRID
+                    // TODO Explode each COLUMN to call GRID
+                    default:
+                        valid = false;
+                        Log.logs.Add("Wrong file loaded");
+                        break;
                 }
             }
         }
@@ -139,7 +152,11 @@ namespace CrozzleApp.Classes
         private void ValidadeCrozzle()
         {
             // TODO Implement if valid then instatiate the Grid class
-            grid = new Grid(rows, columns);
+            if (valid == true && configuration.Valid == true && wordList.Valid == true)
+            {
+                grid = new Grid(rows, columns);
+            }
+            
         }
         #endregion
     }

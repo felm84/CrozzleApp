@@ -7,18 +7,29 @@ using System.Threading.Tasks;
 
 namespace CrozzleApp.Classes
 {
-    class Log
+    static class Log
     {
-        List<string> logs = new List<string>();
+        // In case file has no address from LOGFILE_NAME
+        public static string file = "log.txt";
 
-        DateTime now = DateTime.Now;
+        public static List<string> logs = new List<string>();
 
-        public Log()
-        {         
-            using (StreamWriter writer = File.AppendText("logs.txt"))
+        public static DateTime now;
+
+        //public static string currentFile;
+
+        public static void WriteLogs()
+        {
+            now = DateTime.Now;
+            using (StreamWriter writer = File.AppendText(file))
             {
                 writer.WriteLine("\n********************************");
                 writer.WriteLine("Log Data : {0}", now);
+                writer.WriteLine("********************************");
+                foreach (string log in logs)
+                {
+                    writer.WriteLine(log);
+                }
             }
         }
 

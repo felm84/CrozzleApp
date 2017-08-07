@@ -11,12 +11,15 @@ namespace CrozzleApp.Classes
     class Configuration
     {
         #region PRIVATE VARIABLES
+        // Determines if the file is valid
+        private bool valid = true;
+
         /* 
-         * Dictionary organizes key value 
+         * List of KeyValuePair organizes key value 
          * pairs to be used in ValidadeFile
          * and ValidadeCrozzle
         */
-        private Dictionary<string, string> lines = new Dictionary<string, string>();
+        private List<KeyValuePair<string, string>> lines = new List<KeyValuePair<string, string>>();
 
         // Limits on the size of the word list.
         private int minNumberUniqWords;
@@ -82,7 +85,6 @@ namespace CrozzleApp.Classes
 
         #endregion
 
-
         public Configuration(string file)
         {
             ReadFile(file);
@@ -90,6 +92,12 @@ namespace CrozzleApp.Classes
         }
 
         #region ENCAPSULATION
+        public bool Valid
+        {
+            get => valid;
+            private set => valid = value;
+        }
+
         public int MinNumberUniqWords
         {
             get => minNumberUniqWords;
@@ -248,8 +256,6 @@ namespace CrozzleApp.Classes
 
         #endregion
 
-
-
         // @CheckMinNumber checks any int value for Minimum number data.
         private int CheckMinNumber(string key, string value)
         {
@@ -260,12 +266,14 @@ namespace CrozzleApp.Classes
                 if (number < 1)
                 {
                     // TODO Attach this error to a Window Dialog
-                    throw new Exception("Value is negative");
+                    valid = false;
+                    Log.logs.Add(key + " has value smaller than 1: " + number);
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                valid = false;
+                Log.logs.Add(ex.Message);
             }
             return number;
         }
@@ -278,22 +286,26 @@ namespace CrozzleApp.Classes
                 number = int.Parse(value);
                 if (minNumber == 0)
                 {
-                    throw new Exception("Minimum value not available");
+                    valid = false;
+                    Log.logs.Add("Minimum value not available");
                 }
                 else if (number < 1)
                 {
                     // TODO Attach this error to a Window Dialog
-                    throw new Exception("Value is negative");
+                    valid = false;
+                    Log.logs.Add(key + " has value smaller than 1: " + number);
                 }
                 else if (number < minNumber)
                 {
                     // TODO Attach this error to a Window Dialog
-                    throw new Exception("Value is smaller than minimum value");
+                    valid = false;
+                    Log.logs.Add(key +" has value smaller than " + minNumber + ": " + number);
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                valid = false;
+                Log.logs.Add(ex.Message);
             }
             return number;
         }
@@ -307,13 +319,14 @@ namespace CrozzleApp.Classes
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                valid = false;
+                Log.logs.Add(ex.Message);
             }
 
             return result;
         }
 
-        private string CheckColorData(string value)
+        private string CheckColorData(string key, string value)
         {
             // Regex matches value starting with 
             // # then values from a-f or 0-9 within 6 digits
@@ -325,6 +338,8 @@ namespace CrozzleApp.Classes
             else
             {
                 //TODO Implement error
+                valid = false;
+                Log.logs.Add(key + " has invalid color value: " + value);
                 return "Error: Color not available";
             }
         }
@@ -340,6 +355,10 @@ namespace CrozzleApp.Classes
 
                     while ((line = sr.ReadLine()) != null)
                     {
+                        line = line.Replace("\"", "");
+
+                        line = line.Trim();
+
                         int index = line.IndexOf(@"//");
 
                         if (index >= 0)
@@ -357,13 +376,14 @@ namespace CrozzleApp.Classes
                         /* TODO Fix ReadFile to adapt NON_INTERSECTING_POINTS_PER_LETTER
                          * and INTERSECTING_POINTS_PER_LETTER into another Dictionary.
                         */
-                        lines.Add(keyValuePair[0], keyValuePair[1]);
+                        lines.Add(new KeyValuePair<string, string>(keyValuePair[0], keyValuePair[1]));
                     }
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                valid = false;
+                Log.logs.Add(ex.Message);
             }
         }
 
@@ -373,6 +393,9 @@ namespace CrozzleApp.Classes
             {
                 switch (pair.Key)
                 {
+                    case "LOGFILE_NAME":
+                        Log.file = pair.Value;
+                        break;
                     case "MINIMUM_NUMBER_OF_UNIQUE_WORDS":
                         MinNumberUniqWords = CheckMinNumber(pair.Key, pair.Value);
                         break;
@@ -389,10 +412,10 @@ namespace CrozzleApp.Classes
                         Style = pair.Value;
                         break;
                     case "BGCOLOUR_EMPTY_TD":
-                        BgColorEmpty = CheckColorData(pair.Value);
+                        BgColorEmpty = CheckColorData(pair.Key, pair.Value);
                         break;
                     case "BGCOLOUR_NON_EMPTY_TD":
-                        BgColorNonEmpty = CheckColorData(pair.Value);
+                        BgColorNonEmpty = CheckColorData(pair.Key, pair.Value);
                         break;
                     case "MINIMUM_NUMBER_OF_ROWS":
                         MinNumberRows = CheckMinNumber(pair.Key, pair.Value);
@@ -450,6 +473,10 @@ namespace CrozzleApp.Classes
                         break;
                     case "NON_INTERSECTING_POINTS_PER_LETTER":
                         NonInterPointsPerLetter = pair.Value;
+                        break;
+                    default:
+                        valid = false;
+                        Log.logs.Add("Wrong file loaded");
                         break;
                 }
             }

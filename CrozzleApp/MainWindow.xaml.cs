@@ -47,6 +47,7 @@ namespace CrozzleApp
 
         private void Exit_Click(object sender, RoutedEventArgs e)
         {
+            Log.WriteLogs();
             this.Close();
         }
     }

@@ -10,11 +10,20 @@ namespace CrozzleApp.Classes
 {
     class Words
     {
+        // Determines if the file is valid
+        private bool valid = true;
+
         /* 
          * List organizes all names 
          * to be used in ValidadeFile
         */
         List<string> words = new List<string>();
+
+        public bool Valid
+        {
+            get => valid;
+            private set => valid = value;
+        }
 
         public Words(string file)
         {
@@ -53,7 +62,8 @@ namespace CrozzleApp.Classes
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                valid = false;
+                Log.logs.Add(ex.Message);
             }
         }
 
@@ -70,6 +80,7 @@ namespace CrozzleApp.Classes
             Match match = Regex.Match(word, @"(^[a-zA-Z]\w*$)");
             if (!match.Success)
             {
+                valid = false;
                 return false;
             }
             else
