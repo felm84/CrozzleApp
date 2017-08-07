@@ -19,5 +19,10 @@ namespace CrozzleApp.Classes
 
         public int Rows { get => rows; private set => rows = value; }
         public int Columns { get => columns; private set => columns = value; }
+
+        public void BuildGrid(int row, string name, int column)
+        {
+
+        }
     }
 }

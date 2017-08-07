@@ -14,6 +14,8 @@ namespace CrozzleApp.Classes
         // Determines if the file is valid
         private bool valid = true;
 
+        private string root;
+
         /* 
          * List of KeyValuePair organizes key value 
          * pairs to be used in ValidadeFile
@@ -75,18 +77,19 @@ namespace CrozzleApp.Classes
          * Points per letter that is at the intersection of
          * a horizontal and vertical word within the crozzle.
         */
-        private string interPointsPerLetter;
+        private Dictionary<char, int> interPointsPerLetter = new Dictionary<char, int>();
 
         /* 
          * Points per letter that is not at the intersection of
          * a horizontal and vertical word within the crozzle.
         */
-        private string nonInterPointsPerLetter;
+        private Dictionary<char, int> nonInterPointsPerLetter = new Dictionary<char, int>();
 
         #endregion
 
         public Configuration(string file)
         {
+            root = Path.GetDirectoryName(file);
             ReadFile(file);
             ValidateFile();
         }
@@ -242,107 +245,7 @@ namespace CrozzleApp.Classes
             private set => pointsPerWord = value;
         }
 
-        public string InterPointsPerLetter
-        {
-            get => interPointsPerLetter;
-            private set => interPointsPerLetter = value;
-        }
-
-        public string NonInterPointsPerLetter
-        {
-            get => nonInterPointsPerLetter;
-            private set => nonInterPointsPerLetter = value;
-        }
-
         #endregion
-
-        // @CheckMinNumber checks any int value for Minimum number data.
-        private int CheckMinNumber(string key, string value)
-        {
-            int number = 0;
-            try
-            {
-                number = int.Parse(value);
-                if (number < 1)
-                {
-                    // TODO Attach this error to a Window Dialog
-                    valid = false;
-                    Log.logs.Add(key + " has value smaller than 1: " + number);
-                }
-            }
-            catch (Exception ex)
-            {
-                valid = false;
-                Log.logs.Add(ex.Message);
-            }
-            return number;
-        }
-
-        private int CheckMaxNumber(string key, string value, int minNumber)
-        {
-            int number = 0;
-            try
-            {
-                number = int.Parse(value);
-                if (minNumber == 0)
-                {
-                    valid = false;
-                    Log.logs.Add("Minimum value not available");
-                }
-                else if (number < 1)
-                {
-                    // TODO Attach this error to a Window Dialog
-                    valid = false;
-                    Log.logs.Add(key + " has value smaller than 1: " + number);
-                }
-                else if (number < minNumber)
-                {
-                    // TODO Attach this error to a Window Dialog
-                    valid = false;
-                    Log.logs.Add(key +" has value smaller than " + minNumber + ": " + number);
-                }
-            }
-            catch (Exception ex)
-            {
-                valid = false;
-                Log.logs.Add(ex.Message);
-            }
-            return number;
-        }
-
-        private bool CheckBool(string value)
-        {
-            bool result = true;
-            try
-            {
-                result = bool.Parse(value);
-            }
-            catch (Exception ex)
-            {
-                valid = false;
-                Log.logs.Add(ex.Message);
-            }
-
-            return result;
-        }
-
-        private string CheckColorData(string key, string value)
-        {
-            // Regex matches value starting with 
-            // # then values from a-f or 0-9 within 6 digits
-            Match match = Regex.Match(value, @"(^#+[a-f | 0-9]{6})");
-            if (match.Success && value.Length == 7)
-            {
-                return value;
-            }
-            else
-            {
-                //TODO Implement error
-                valid = false;
-                Log.logs.Add(key + " has invalid color value: " + value);
-                return "Error: Color not available";
-            }
-        }
 
         #region CONFIGURATION METHODS
         private void ReadFile(string file)
@@ -373,10 +276,23 @@ namespace CrozzleApp.Classes
 
                         string[] keyValuePair = line.Split(new char[] { '=' });
 
-                        /* TODO Fix ReadFile to adapt NON_INTERSECTING_POINTS_PER_LETTER
-                         * and INTERSECTING_POINTS_PER_LETTER into another Dictionary.
-                        */
-                        lines.Add(new KeyValuePair<string, string>(keyValuePair[0], keyValuePair[1]));
+                        if(keyValuePair.Length == 2)
+                        {
+                            lines.Add(new KeyValuePair<string, string>(keyValuePair[0], keyValuePair[1]));
+                        }
+                        else if (keyValuePair.Length > 2)
+                        {
+                            string temp = string.Join("=", keyValuePair);
+                            temp = temp.Replace(keyValuePair[0]+"=", "");
+                            lines.Add(new KeyValuePair<string, string>(keyValuePair[0], temp));
+                        }
+                        else
+                        {
+                            valid = false;
+                            Exception ex = new IndexOutOfRangeException();
+                            Log.logs.Add(keyValuePair[0] + " - " + ex.Message);
+                        }
+                        
                     }
                 }
             }
@@ -394,7 +310,7 @@ namespace CrozzleApp.Classes
                 switch (pair.Key)
                 {
                     case "LOGFILE_NAME":
-                        Log.file = pair.Value;
+                        Log.file = root + "\\" + pair.Value;
                         break;
                     case "MINIMUM_NUMBER_OF_UNIQUE_WORDS":
                         MinNumberUniqWords = CheckMinNumber(pair.Key, pair.Value);
@@ -406,7 +322,7 @@ namespace CrozzleApp.Classes
                         InvalidCrozzleScore = pair.Value;
                         break;
                     case "UPPERCASE":
-                        Uppercase = CheckBool(pair.Value);
+                        Uppercase = CheckBool(pair.Key, pair.Value);
                         break;
                     case "STYLE":
                         Style = pair.Value;
@@ -469,17 +385,154 @@ namespace CrozzleApp.Classes
                         PointsPerWord = CheckMinNumber(pair.Key, pair.Value);
                         break;
                     case "INTERSECTING_POINTS_PER_LETTER":
-                        InterPointsPerLetter = pair.Value;
+                        BreakData(pair.Key, pair.Value);
                         break;
                     case "NON_INTERSECTING_POINTS_PER_LETTER":
-                        NonInterPointsPerLetter = pair.Value;
-                        break;
-                    default:
-                        valid = false;
-                        Log.logs.Add("Wrong file loaded");
+                        BreakData(pair.Key, pair.Value);
                         break;
                 }
             }
+        }
+
+        // @CheckMinNumber checks any int value for Minimum number data.
+        private int CheckMinNumber(string key, string value)
+        {
+            int number = 0;
+            try
+            {
+                number = int.Parse(value);
+                if (number < 1)
+                {
+                    // TODO Attach this error to a Window Dialog
+                    valid = false;
+                    Log.logs.Add(key + " - Has value smaller than 1: " + number);
+                }
+            }
+            catch (Exception ex)
+            {
+                valid = false;
+                Log.logs.Add(key + " - " + ex.Message);
+            }
+            return number;
+        }
+
+        private int CheckMaxNumber(string key, string value, int minNumber)
+        {
+            int number = 0;
+            try
+            {
+                number = int.Parse(value);
+                if (minNumber == 0)
+                {
+                    valid = false;
+                    Log.logs.Add(key + " - Minimum value not available");
+                }
+                else if (number < 1)
+                {
+                    // TODO Attach this error to a Window Dialog
+                    valid = false;
+                    Log.logs.Add(key + " - Has value smaller than 1: " + number);
+                }
+                else if (number < minNumber)
+                {
+                    // TODO Attach this error to a Window Dialog
+                    valid = false;
+                    Log.logs.Add(key + " - Has value smaller than " + minNumber + ": " + number);
+                }
+            }
+            catch (Exception ex)
+            {
+                valid = false;
+                Log.logs.Add(key + " - " + ex.Message);
+            }
+            return number;
+        }
+
+        private bool CheckBool(string key, string value)
+        {
+            bool result = true;
+            try
+            {
+                result = bool.Parse(value);
+            }
+            catch (Exception ex)
+            {
+                valid = false;
+                Log.logs.Add(key + " - " + ex.Message);
+            }
+
+            return result;
+        }
+
+        private string CheckColorData(string key, string value)
+        {
+            // Regex matches value starting with 
+            // # then values from a-f or 0-9 within 6 digits
+            Match match = Regex.Match(value, @"(^#+[a-f | 0-9]{6})");
+            if (match.Success && value.Length == 7)
+            {
+                return value;
+            }
+            else
+            {
+                //TODO Implement error
+                valid = false;
+                Log.logs.Add(key + " - Has invalid color value: " + value);
+                return "";
+            }
+        }
+
+        private void BreakData(string key, string value)
+        {
+            char letter;
+            int point;
+
+            string[] firstBreak = value.Split(new char[] { ',' });
+
+            foreach (string data in firstBreak)
+            {
+                string[] secondBreak = data.Split(new char[] { '=' });
+
+                letter = CheckChar(secondBreak[0]);
+
+                point = CheckPoints(secondBreak[0], secondBreak[1]);
+
+                if (key == "INTERSECTING_POINTS_PER_LETTER")
+                {
+
+                    interPointsPerLetter.Add(letter, point);
+                }
+                else
+                {
+                    nonInterPointsPerLetter.Add(letter, point);
+                }
+            }
+
+        }
+
+        private char CheckChar(string value)
+        {
+            return char.Parse(value);
+        }
+
+        private int CheckPoints(string key, string value)
+        {
+            int number = 0;
+            try
+            {
+                number = int.Parse(value);
+                if (number < 0)
+                {
+                    valid = false;
+                    Log.logs.Add(key + " - Has negative value: " + number);
+                }
+            }
+            catch (Exception ex)
+            {
+                valid = false;
+                Log.logs.Add(key + " - " + ex.Message);
+            }
+            return number;
         }
 
         #endregion

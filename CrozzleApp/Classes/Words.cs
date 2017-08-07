@@ -71,7 +71,11 @@ namespace CrozzleApp.Classes
         {
             foreach (string word in words)
             {
-                if (CheckWord(word) == false) break;       
+                if (!CheckWord(word))
+                {
+                    valid = false;
+                    break;
+                }
             }
         }
 
@@ -80,7 +84,7 @@ namespace CrozzleApp.Classes
             Match match = Regex.Match(word, @"(^[a-zA-Z]\w*$)");
             if (!match.Success)
             {
-                valid = false;
+                Log.logs.Add("Invalid word: " + word);
                 return false;
             }
             else
