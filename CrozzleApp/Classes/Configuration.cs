@@ -382,7 +382,7 @@ namespace CrozzleApp.Classes
                         MaxNumberOfGroups = CheckMaxNumber(pair.Key, pair.Value, minNumberOfGroups);
                         break;
                     case "POINTS_PER_WORD":
-                        PointsPerWord = CheckMinNumber(pair.Key, pair.Value);
+                        PointsPerWord = CheckPoints(pair.Key, pair.Value);
                         break;
                     case "INTERSECTING_POINTS_PER_LETTER":
                         BreakData(pair.Key, pair.Value);
@@ -416,6 +416,7 @@ namespace CrozzleApp.Classes
             return number;
         }
 
+        // @CheckMaxNumber checks any int value for Maximum number data.
         private int CheckMaxNumber(string key, string value, int minNumber)
         {
             int number = 0;
@@ -448,6 +449,7 @@ namespace CrozzleApp.Classes
             return number;
         }
 
+        // @CheckBool checks any boolean value for boolean data.
         private bool CheckBool(string key, string value)
         {
             bool result = true;
@@ -464,6 +466,7 @@ namespace CrozzleApp.Classes
             return result;
         }
 
+        // @CheckColorData checks any hexadecimal value for color data.
         private string CheckColorData(string key, string value)
         {
             // Regex matches value starting with 
@@ -482,9 +485,12 @@ namespace CrozzleApp.Classes
             }
         }
 
+        // @BreakData splits specific data twice to get points per letter
+        // in INTERSECTING_POINTS_PER_LETTER and NON_INTERSECTING_POINTS_PER_LETTER.
         private void BreakData(string key, string value)
         {
             char letter;
+
             int point;
 
             string[] firstBreak = value.Split(new char[] { ',' });
@@ -510,11 +516,13 @@ namespace CrozzleApp.Classes
 
         }
 
+        // @CheckChar checks character and convert it to if string.
         private char CheckChar(string value)
         {
             return char.Parse(value);
         }
 
+        // @CheckChar checks any int value for points.
         private int CheckPoints(string key, string value)
         {
             int number = 0;

@@ -146,10 +146,26 @@ namespace CrozzleApp.Classes
 
         private void ValidadeCrozzle()
         {
-            // TODO Implement if valid then instatiate the Grid class
-            if (valid == true && configuration.Valid == true && wordList.Valid == true)
+            // All indexes must return true.
+            bool[] validation = {
+                valid,
+                configuration.Valid,
+                wordList.Valid,
+                CheckHorVertNumberWords(),
+                CheckNumberOfSameWord(),
+                CheckCrozzleSize(),
+            };
+
+            foreach (bool valid in validation)
             {
-                grid = new Grid(rows, columns);
+                if (valid == false)
+                {
+                    // TODO Invalid data somewhere.
+                }
+                else
+                {
+                    grid = new Grid(rows, columns);
+                }
             }
 
         }
@@ -220,6 +236,129 @@ namespace CrozzleApp.Classes
             }
             return number;
         }
+
+        /* 
+         * @CheckNumberOfSameWord returns false by default
+         * it MUST reach the last if statement to return true.
+         */
+        private bool CheckNumberOfSameWord()
+        {
+            // Temporary List to join both dataRowList and dataColList
+            List<Tuple<int, string, int>> temp = dataRowList;
+
+            // Add list from dataColList into temp list
+            temp.AddRange(dataColList);
+
+            /*
+             * Create a group list of duplicated words
+             * from temp list
+             */
+            var sameWord = temp.GroupBy(x => x.Item2)
+                              .Where(g => g.Count() > 1)
+                              .ToList();
+
+            if (sameWord.Count > 0)
+            {
+                if (sameWord.Count >= configuration.MinNumberSameWord && sameWord.Count <= configuration.MaxNumberSameWord)
+                {
+                    return true;
+                    // TODO Check if all duplicated values have the same row and column number
+                    //foreach (var data in sameWord)
+                    //{
+
+                    //}
+                }
+            }
+
+            return false;
+
+            //var test = sameWordRow[0].ToList().Count;
+        }
+
+        /* 
+         * @CheckHorVertNumberWords returns false by default
+         * it MUST reach the last if statement to return true.
+         * It checks both minimum and maximum number of words
+         * in vertical and horizontal position.
+         */
+        private bool CheckHorVertNumberWords()
+        {
+            if (dataRowList.Count >= configuration.MinHorzWords && dataRowList.Count <= configuration.MaxHorzWords)
+            {
+                if (configuration.MinVertWords > dataColList.Count || configuration.MaxVertWords < dataColList.Count)
+                {
+                    return true;
+                }  
+            }
+
+            return false;
+        }
+
+        /* 
+         * @CheckCrozzleSize returns true by default
+         * it MUST pass all if statements to reach true.
+         */
+        private bool CheckCrozzleSize()
+        {
+            /* 
+            * Checks if number of rows and columns are equal or bigger
+            * than minimum number of rows and columns from configuration 
+            * and if number of rows and columns are equal or smaller
+            * than maximum number of rows and columns also from configuration
+            */
+            if ((rows >= configuration.MinNumberRows && rows <= configuration.MaxNumberRows) && 
+                (columns >= configuration.MinNumberCol && columns <= configuration.MaxNumberCol))
+            {
+                /* 
+                 * Checks if number of rows and columns are equal or bigger
+                 * than number of words in dataRowList and dataColList.
+                */
+                if (rows >= dataRowList.Count && columns >= dataColList.Count)
+                {
+                    // Loop dataRowList first, then dataColList.
+                    foreach (var data in dataRowList)
+                    {
+                        /*
+                         * Checks if start row number is bigger than number of rows available
+                         * or combinations of start column number + word length is bigger than
+                         * than number of columns available
+                        */
+                        if (data.Item1 > rows || (data.Item2.Length - 1 + data.Item3) > columns)
+                        {
+                            // TODO generate error
+                            return false;
+                        }
+                    }
+                                        
+                    foreach (var data in dataColList)
+                    {
+                        /*
+                        * Checks if start column number is bigger than number of columns available
+                        * or combinations of start row number + word length is bigger than
+                        * than number of rows available
+                        */
+                        if (data.Item1 > columns || (data.Item2.Length - 1 + data.Item3) > rows)
+                        {
+                            return false;
+                            // TODO generate error
+                        }
+                    }
+                }
+                else
+                {
+                    return false;
+                    // TODO Implement else
+                }
+            }
+            else
+            {
+                return false;
+                // TODO Implement else
+            }
+
+            return true;
+        }
+
         #endregion
     }
 }
